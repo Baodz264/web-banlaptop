@@ -1,0 +1,86 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./shop-server
+    container_name: ecommerce_backend
+    restart: always
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./shop-server/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongo:
+        condition: service_started
+      redis:
+        condition: service_started
+    networks:
+      - app
+
+  frontend:
+    build: ./shop-web
+    container_name: ecommerce_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - app
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: ecommerce_computer
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    networks:
+      - app
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: 123456
+    depends_on:
+      - mysql
+    networks:
+      - app
+
+volumes:
+  mysql_data:
+  mongo_data:
+
+networks:
+  app:
