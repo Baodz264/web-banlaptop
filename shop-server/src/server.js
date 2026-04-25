@@ -31,16 +31,17 @@ const startServer = async () => {
     // ================= HTTP SERVER =================
     const server = http.createServer(app);
 
-    // ================= SOCKET.IO (FIX VPS READY) =================
     const io = new Server(server, {
       cors: {
         origin: "*",
         methods: ["GET", "POST"]
       },
+
       path: "/socket.io",
-      transports: ["polling", "websocket"],
-      allowEIO3: true
+
+      transports: ["websocket", "polling"]
     });
+
 
     io.on("connection", (socket) => {
       console.log("🔌 User connected:", socket.id);
