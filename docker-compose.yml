@@ -38,7 +38,7 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: ecommerce_computer
     volumes:
-      - mysql_data:/var/lib/mysql
+      - shop-server_mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -79,8 +79,12 @@ services:
       - app
 
 volumes:
-  mysql_data:
+  shop-server_mysql_data:
+    external: true
+    name: shop-server_mysql_data
+
   mongo_data:
+    external: false
 
 networks:
   app:
