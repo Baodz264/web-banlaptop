@@ -3,7 +3,8 @@ import path from "path";
 import fs from "fs";
 
 const createUploader = (folder) => {
-  const uploadPath = path.resolve(`uploads/${folder}`);
+  const uploadPath = path.join(process.cwd(), "uploads", folder);
+
 
 
   if (!fs.existsSync(uploadPath)) {
