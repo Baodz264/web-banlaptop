@@ -31,17 +31,20 @@ const startServer = async () => {
     // ================= HTTP SERVER =================
     const server = http.createServer(app);
 
+    // ================= SOCKET.IO (FIX CHUẨN VPS) =================
     const io = new Server(server, {
       cors: {
         origin: "*",
         methods: ["GET", "POST"]
       },
 
-      path: "/socket.io",
+      // 🔥 QUAN TRỌNG: phải có dấu / cuối
+      path: "/socket.io/",
 
-      transports: ["websocket", "polling"]
+      // 🔥 ổn định VPS + Nginx
+      transports: ["polling", "websocket"],
+      allowEIO3: true
     });
-
 
     io.on("connection", (socket) => {
       console.log("🔌 User connected:", socket.id);
