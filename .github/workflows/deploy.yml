@@ -17,7 +17,15 @@ jobs:
           username: root
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -e
+
             cd /var/www/ecommerce
+
+            echo "📦 Pulling latest code..."
             git pull origin main
+
+            echo "🐳 Restarting Docker..."
             docker-compose down
             docker-compose up -d --build
+
+            echo "✅ Deploy done"
