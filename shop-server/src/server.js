@@ -38,10 +38,10 @@ const startServer = async () => {
         methods: ["GET", "POST"]
       },
 
-      // 🔥 QUAN TRỌNG: phải có dấu / cuối
-      path: "/socket.io/",
+      // ⚠️ QUAN TRỌNG: KHÔNG có dấu / cuối
+      path: "/socket.io",
 
-      // 🔥 ổn định VPS + Nginx
+      // VPS ổn định
       transports: ["polling", "websocket"],
       allowEIO3: true
     });
@@ -72,7 +72,7 @@ const startServer = async () => {
 
     server.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`🔌 Socket.IO ready at /socket.io/`);
+      console.log(`🔌 Socket.IO ready at /socket.io`);
     });
 
   } catch (error) {
