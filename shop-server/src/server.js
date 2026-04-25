@@ -31,13 +31,19 @@ const startServer = async () => {
     // ================= HTTP SERVER =================
     const server = http.createServer(app);
 
-    // ================= SOCKET.IO =================
+    // ================= SOCKET.IO (FIX VPS READY) =================
     const io = new Server(server, {
       cors: {
         origin: "*",
         methods: ["GET", "POST"]
       },
-      path: "/socket.io", // 🔥 QUAN TRỌNG FIX VPS
+
+      // 🔥 QUAN TRỌNG: phải có dấu / cuối
+      path: "/socket.io/",
+
+      // 🔥 FIX ổn định websocket trên Nginx
+      transports: ["polling", "websocket"],
+      allowEIO3: true
     });
 
     io.on("connection", (socket) => {
@@ -66,7 +72,7 @@ const startServer = async () => {
 
     server.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`🔌 Socket.IO ready at /socket.io`);
+      console.log(`🔌 Socket.IO ready at /socket.io/`);
     });
 
   } catch (error) {
