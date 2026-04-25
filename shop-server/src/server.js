@@ -37,11 +37,7 @@ const startServer = async () => {
         origin: "*",
         methods: ["GET", "POST"]
       },
-
-      // 🔥 QUAN TRỌNG: phải có dấu / cuối
-      path: "/socket.io/",
-
-      // 🔥 FIX ổn định websocket trên Nginx
+      path: "/socket.io",
       transports: ["polling", "websocket"],
       allowEIO3: true
     });
