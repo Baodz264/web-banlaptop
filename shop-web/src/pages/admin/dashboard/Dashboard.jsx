@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import {
   Card, Col, Row, Spin, Select, DatePicker, Space,
-  Typography, Table, Statistic, Tag, Empty, Image
+  Typography, Table, Statistic, Tag, Empty, Image,
+  FloatButton, Modal
 } from "antd";
 import {
   DollarOutlined, ShoppingCartOutlined, UserOutlined,
-  ArrowUpOutlined, FireOutlined, PieChartOutlined, LineChartOutlined
+  ArrowUpOutlined, FireOutlined, PieChartOutlined, 
+  LineChartOutlined, MessageOutlined, RobotOutlined
 } from "@ant-design/icons";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid,
@@ -19,6 +21,9 @@ import productService from "../../../services/product.service";
 import OrderService from "../../../services/order.service";
 import OrderItemService from "../../../services/orderItem.service";
 
+// Components
+import ChatAdminModal from "../../../components/admin/ChatAdminModal/ChatAdminModal";
+
 const { Title, Text } = Typography;
 const { Option } = Select;
 const API_URL = "http://tbtshoplt.xyz";
@@ -27,6 +32,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState("month");
   const [selectedDate, setSelectedDate] = useState(dayjs());
+  
+  // State điều khiển việc đóng mở Chat Modal
+  const [isChatVisible, setIsChatVisible] = useState(false);
 
   // Data States
   const [stats, setStats] = useState({
@@ -184,7 +192,8 @@ const Dashboard = () => {
   );
 
   return (
-    <div style={{ padding: "24px", background: "#f0f2f5", minHeight: "100vh" }}>
+    <div style={{ padding: "24px", background: "#f0f2f5", minHeight: "100vh", position: "relative" }}>
+      {/* Header & Filter */}
       <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
         <Col>
           <Title level={3} style={{ margin: 0 }}>Hệ Thống Phân Tích</Title>
@@ -207,6 +216,7 @@ const Dashboard = () => {
         </Col>
       </Row>
 
+      {/* Stats Cards */}
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <Card variant="borderless" hoverable>
@@ -240,6 +250,7 @@ const Dashboard = () => {
         </Col>
       </Row>
 
+      {/* Charts & Top Products */}
       <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
         <Col xs={24} lg={16}>
           <Card title={<span><LineChartOutlined style={{ marginRight: 8 }} />Biểu đồ doanh thu thực tế (Delivered)</span>} variant="borderless">
@@ -272,6 +283,7 @@ const Dashboard = () => {
         </Col>
       </Row>
 
+      {/* Bar Chart Order Count */}
       <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
         <Col xs={24}>
           <Card title="Sản lượng đơn đặt hàng (Tổng quát)" variant="borderless">
@@ -292,6 +304,37 @@ const Dashboard = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* --- PHẦN TÍCH HỢP CHAT ADMIN --- */}
+      {/* Nút nổi góc phải màn hình */}
+      <FloatButton
+        icon={<MessageOutlined />}
+        type="primary"
+        tooltip={<div>Hỏi trợ lý AI</div>}
+        onClick={() => setIsChatVisible(true)}
+        style={{ right: 24, bottom: 24 }}
+      />
+
+      {/* Modal chứa ChatAdminModal */}
+      <Modal
+        title={
+          <Space>
+            <RobotOutlined style={{ color: '#1677ff' }} />
+            <span>Trợ lý AI phân tích hệ thống</span>
+          </Space>
+        }
+        open={isChatVisible}
+        onCancel={() => setIsChatVisible(false)}
+        footer={null} // Ẩn footer vì ChatAdminModal đã có input riêng
+        width={700}
+        centered
+        styles={{ body: { padding: 0 } }} // Xóa padding để chat hiển thị tràn khung modal đẹp hơn
+        destroyOnClose // Reset lại hội thoại khi đóng nếu cần
+      >
+        <div style={{ padding: '16px' }}>
+          <ChatAdminModal />
+        </div>
+      </Modal>
     </div>
   );
 };
