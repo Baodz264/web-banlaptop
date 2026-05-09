@@ -20,11 +20,9 @@ const startServer = async () => {
   try {
     // ================= DB CONNECT =================
     await connectMySQL();
-
-    if (env.NODE_ENV === "development") {
       await sequelize.sync();
       console.log("✅ MySQL Tables Synced (DEV MODE)");
-    }
+    
 
     await connectMongo();
 
