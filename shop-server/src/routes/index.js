@@ -52,7 +52,6 @@ import notificationRoute from "../modules/notifications/notification.route.js";
 
 import exportRoute from '../modules/export/export.route.js';
 import aiChatRoute from "../modules/ai-chat/aiChat.route.js";
-import adminChatRoute from "../modules/ai-admin/adminChat.route.js";
 
 
 
@@ -112,7 +111,6 @@ router.use("/post-images", postImageRoute);
 router.use("/post-products", postProductRoute);
 router.use('/export', exportRoute);
 router.use("/ai", aiChatRoute);
-router.use("/ai-admin", adminChatRoute);
 
 
 
